@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>公司內部點餐工具</title>
+    <title>公司內部下午茶點餐工具</title>
     <link rel="stylesheet" href="all.css">
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -16,7 +16,7 @@
 
     <div class="container">
         <header>
-            <h1>🍱 公司點餐系統</h1>
+            <h1>🍰 公司下午茶點餐系統</h1>
             <div id="user-info" class="hidden">
                 <span id="user-name"></span>
                 <button id="sign-out-btn" class="btn btn-outline">登出</button>
@@ -31,6 +31,10 @@
                     <span class="icon"></span>
                     <span class="text">使用 Google 帳號登入</span>
                 </button>
+            </div>
+            <div class="tea-illustration">
+                <img src="img/logo.png" alt="美味下午茶" class="floating-logo">
+                <div id="current-datetime" class="datetime-display"></div>
             </div>
         </section>
 

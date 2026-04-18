@@ -15,7 +15,7 @@ const CONFIG = {
     // 請填入您的 GCP API Key
     API_KEY: '',
     // 請填入您的 Google Sheet ID
-    SPREADSHEET_ID: '1J-P7uhA15oGe-k0tUYayUcAiLSqlmoZaXJVR3R1kFQU',
+    SPREADSHEET_ID: '150WuLag0CYXDJmHmMrtcZujCOHw6RDaTp_8EALs0JZ8',
 
     // Google Sheets Discovery Doc
     DISCOVERY_DOC: 'https://sheets.googleapis.com/$discovery/rest?version=v4',
@@ -68,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // 啟動時間顯示
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
     // 先初始化 GAPI，完成後再嘗試自動登入
     initGapiClient().then(() => {
         console.log("GAPI ready, trying auto login...");
@@ -77,6 +81,21 @@ document.addEventListener('DOMContentLoaded', () => {
         showLogin();
     });
 });
+
+// --- UI Helpers / Utilities ---
+function updateDateTime() {
+    const dtElement = document.getElementById('current-datetime');
+    if (dtElement) {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const hh = String(now.getHours()).padStart(2, '0');
+        const min = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        dtElement.textContent = `🕒 目前時間：${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+    }
+}
 
 // --- Google API 初始化 ---
 

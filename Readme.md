@@ -8,8 +8,16 @@
 
 An internal company meal ordering web application built with HTML, CSS, and Vanilla JavaScript. It uses Google Identity Services for user authentication and Google Sheets API as a backend database for managing menus, users, and orders.
 
-![Output Screenshot](./Output.png)
+### Screenshots
 
+**Login Page (Main):**
+![Login Screenshot](./img/login.png)
+
+**Admin View:**
+![Admin Account Screenshot](./img/output_adminaccount.png)
+
+**User View:**
+![User Account Screenshot](./img/output_user_account.png)
 ### Features
 
 *   **Google Account Integration**: Secure login using Google Identity Services.
@@ -48,8 +56,16 @@ const CONFIG = {
 
 這是一個採用 HTML、CSS 和純 JavaScript 開發的內部點餐網頁應用程式。採用 Google Identity Services 進行使用者身分驗證，並將 Google Sheets (試算表) 作為後端資料庫來管理菜單、使用者和訂單。
 
-![Output 截圖](./Output.png)
+### 系統截圖
 
+**登入畫面 (首頁)：**
+![Login Screenshot](./img/login.png)
+
+**管理員介面：**
+![Admin Account Screenshot](./img/output_adminaccount.png)
+
+**一般成員介面：**
+![User Account Screenshot](./img/output_user_account.png)
 ### 主要功能
 
 *   **Google 帳號登入**：串接 Google Identity Services，提供安全便捷的登入方式。
