@@ -11,11 +11,11 @@
 // --- 設定 ---
 const CONFIG = {
     // 請填入您的 GCP Client ID
-    CLIENT_ID: '',
+    CLIENT_ID: '39804282924-73f3mgr9ku5tg7jqdshdh52qdhmtri8o.apps.googleusercontent.com',
     // 請填入您的 GCP API Key
     API_KEY: '',
     // 請填入您的 Google Sheet ID
-    SPREADSHEET_ID: '',
+    SPREADSHEET_ID: '1J-P7uhA15oGe-k0tUYayUcAiLSqlmoZaXJVR3R1kFQU',
 
     // Google Sheets Discovery Doc
     DISCOVERY_DOC: 'https://sheets.googleapis.com/$discovery/rest?version=v4',
@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-open-config').addEventListener('click', showConfigPanel);
     document.getElementById('btn-save-config').addEventListener('click', saveTodayConfig);
     document.getElementById('btn-clear-orders').addEventListener('click', clearOrders);
-    document.getElementById('btn-show-orders').addEventListener('click', openOrdersModal);
+    document.getElementById('btn-show-orders').addEventListener('click', () => openOrdersModal('today'));
+    const btnMonthOrders = document.getElementById('btn-show-month-orders');
+    if (btnMonthOrders) {
+        btnMonthOrders.addEventListener('click', () => openOrdersModal('month'));
+    }
     document.querySelector('.close-modal').addEventListener('click', closeOrdersModal);
     document.getElementById('btn-copy-orders').addEventListener('click', copyOrdersToClipboard);
 
@@ -548,10 +552,17 @@ async function clearOrders() {
 
 // --- 訂單檢視功能 ---
 
-async function openOrdersModal() {
+async function openOrdersModal(viewType = 'today') {
     const modal = document.getElementById('orders-modal');
     const tbody = document.getElementById('orders-list');
     const totalSpan = document.getElementById('total-amount');
+    const modalTitle = document.querySelector('#orders-modal h2');
+
+    if (viewType === 'month') {
+        modalTitle.textContent = '📋 本月訂單列表';
+    } else {
+        modalTitle.textContent = '📋 今日訂單列表';
+    }
 
     tbody.innerHTML = '<tr><td colspan="6">載入中...</td></tr>';
     modal.classList.remove('hidden');
@@ -565,14 +576,37 @@ async function openOrdersModal() {
         const rows = response.result.values || [];
         tbody.innerHTML = '';
 
-        if (rows.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6">目前沒有訂單。</td></tr>';
+        const now = new Date();
+        let filterStart, filterEnd;
+
+        if (viewType === 'month') {
+            filterStart = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+            filterEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        } else {
+            filterStart = new Date(now);
+            filterStart.setHours(0, 0, 0, 0);
+            filterEnd = new Date(now);
+            filterEnd.setHours(23, 59, 59, 999);
+        }
+
+        const filteredRows = rows.filter(row => {
+            if (!row[0]) return false;
+            const dateStr = row[0].replace(/-/g, '/');
+            const orderDate = new Date(dateStr);
+            if (isNaN(orderDate.getTime())) return true;
+            return orderDate >= filterStart && orderDate <= filterEnd;
+        });
+
+        const emptyMsg = viewType === 'month' ? '本月目前沒有訂單。' : '今日目前沒有訂單。';
+
+        if (filteredRows.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6">${emptyMsg}</td></tr>`;
             totalSpan.textContent = '0';
             return;
         }
 
         let total = 0;
-        rows.forEach(row => {
+        filteredRows.forEach(row => {
             // [時間, Email, 餐廳, 餐點, 金額, 備註]
             const tr = document.createElement('tr');
             // 簡單過濾 html tag 防止 XSS (如果需要)
@@ -605,7 +639,8 @@ function closeOrdersModal() {
 function copyOrdersToClipboard() {
     // 將訂單轉為純文字格式
     const rows = document.querySelectorAll('#orders-list tr');
-    let text = "📋 今日點餐清單：\n\n";
+    const modalTitle = document.querySelector('#orders-modal h2').textContent;
+    let text = `${modalTitle}：\n\n`;
 
     rows.forEach(row => {
         const cols = row.querySelectorAll('td');
