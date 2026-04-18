@@ -11,7 +11,7 @@ An internal company meal ordering web application built with HTML, CSS, and Vani
 ### Screenshots
 
 **Login Page (Main):**
-![Login Screenshot](./img/login.png)
+![Login Screenshot](./img/Login.png)
 
 **Admin View:**
 ![Admin Account Screenshot](./img/output_adminaccount.png)
@@ -59,7 +59,7 @@ const CONFIG = {
 ### 系統截圖
 
 **登入畫面 (首頁)：**
-![Login Screenshot](./img/login.png)
+![Login Screenshot](./img/Login.png)
 
 **管理員介面：**
 ![Admin Account Screenshot](./img/output_adminaccount.png)
